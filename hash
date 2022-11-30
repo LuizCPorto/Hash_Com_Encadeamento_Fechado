@@ -1,0 +1,171 @@
+import math
+
+class Lista:
+
+    def __init__(self):
+        self.lista  = []
+        self.lista2 = []
+
+    def vazio(self): #verifica se lista está vazia
+        return len(self.lista) == 0 #retorna True ou False
+
+    def insere_lista(self, item): #insere item no final da lista
+        self.lista.append(item)
+
+    def pesquisa_lista(self, chave): #procura item na lista
+        for i in self.lista:
+            if i == chave:
+                return True
+        return False
+
+    def apaga_lista(self, chave): #apaga item informado
+        self.lista.remove(chave)
+    
+    def imprime_lista(self):
+        lista2 = list(reversed(self.lista))
+        for i in lista2:
+            print("%d -> " %i, end="")  
+
+
+
+
+class Hash_com_colisoes:
+
+    def __init__(self,tam,escolha):
+        self.tab = {}
+        self.tam_max = tam
+        self.escolha = escolha
+
+    def funcao_hash_div(self,chave):  
+        v = int(chave)
+        return (v % int(self.tam_max))
+
+    def funcao_hash_mult(self,chave):  
+        v = int(chave)
+        return int(((v * math.sqrt(5) - 1)  * (self.tam_max)))
+
+
+
+    def imprime(self):
+        for i in self.tab:
+            print("Hash[%d] -> " %i, end="")
+            self.tab[i].imprime_lista()
+            print("null")
+            
+
+    def apaga(self, chave):
+        pos = self.busca(chave)
+        if pos == -1:
+           print(" Item nao encontrado")
+        else:
+            self.tab[pos].apaga_lista(chave)
+
+
+
+    def busca(self, chave):
+        if(self.escolha == 1):
+            pos = self.funcao_hash_div(chave)
+        elif(self.escolha == 2):
+            pos = self.funcao_hash_mult(chave)
+        if self.tab[pos].pesquisa_lista(chave):
+            return pos
+        return -1
+
+
+    def insere(self, item):
+        if(self.escolha == 1): 
+            pos = self.funcao_hash_div(item)
+        elif(self.escolha == 2):
+            pos = self.funcao_hash_mult(item)
+        if self.tab.get(pos) == None: # se posicao vazia
+            self.tab[pos] = Lista()
+        else: # se posicao ocupada
+            if self.tab[pos].pesquisa_lista(item):
+                print(" *** ATENCAO O item %d ja foi cadastrado ***" %item)
+                return
+        self.tab[pos].insere_lista(item) #
+
+
+# fim Classe Hash_com_colisoes
+
+decisao = -1
+
+escolha = int(input("Defina qual será o tipo de função ultilizada: 1-Divisão || 2-Multiplicação:\n"))
+if(escolha == 1):
+    tamanhoHash = 7 #tamanho definido no metódo da divisão pela professora
+    tab = Hash_com_colisoes(tamanhoHash,escolha) #incia a classe
+    while(decisao != 0):
+        decisao = int(input("""Digite qual a sua função desejada:
+                        1-Inserir um elemento
+                        2-Remover um elemento
+                        3-Buscar um elemento
+                        4-Imprimir tabela
+                        5-sair\n"""))
+    
+        if(decisao == 1):
+            for i in range (0,tamanhoHash,1):
+                print("\nInserindo item %d" %(i + 1));
+                item = int(input("Forneca valor: "))
+                if(item == -0):
+                    break
+                else:
+                    tab.insere(item)
+                
+
+        elif(decisao == 2):
+            item = int(input("Digite um valor para ser apagado:"))
+            tab.apaga(item)
+        elif(decisao == 3):
+            item = int(input("Digite um valor para ser buscado:"))
+            pos = tab.busca(item)
+            if pos == -1:
+                print("Item nao encontrado")
+            else:
+                print(f"Item encontrado na posicao:{pos} ")
+        elif(decisao == 4):
+            tab.imprime()   
+            print("\n")
+        elif(decisao == 5):
+            break
+        
+    
+
+
+elif(escolha == 2):
+    tamanhoHash = 512  #tamanho definido no metódo da multiplicação pela professora
+    tab = Hash_com_colisoes(tamanhoHash,escolha) #incia a classe
+    while(decisao != 0):
+        decisao = int(input("""Digite qual a sua função desejada:
+                        1-Inserir um elemento
+                        2-Remover um elemento
+                        3-Buscar um elemento
+                        4-Imprimir tabela
+                        5-sair\n"""))
+    
+        if(decisao == 1):
+            for i in range (0,tamanhoHash,1):
+                print("\nInserindo item %d" %(i + 1));
+                item = int(input("Forneca valor: "))
+                if(item == -0):
+                    break
+                else:
+                    tab.insere(item)
+
+        elif(decisao == 2):
+            item = int(input("Digite um valor para ser apagado:"))
+            tab.apaga(item)
+        elif(decisao == 3):
+            item = int(input("Digite um valor para ser buscado:"))
+            pos = tab.busca(item)
+            if pos == -1:
+                print("Item nao encontrado")
+            else:
+                print(f"Item encontrado na posicao:{pos} ")
+        elif(decisao == 4):
+            tab.imprime()   
+            print("\n")
+        elif(decisao == 5):
+            break
+        
+
+
